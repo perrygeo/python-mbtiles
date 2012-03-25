@@ -15,7 +15,8 @@ Abstract the details of accessing utfgrid and image data from the sqlite datasto
 
 ```python
 tileset = MbtileSet(mbtiles=mbtiles)
-tile = self.tileset.get_tile(z, x, y)
+zoom, col, row = 6, 9, 40
+tile = self.tileset.get_tile(zoom, col, row)
 binary_png = tile.get_png()
 text_json = tile.get_json()
 ```
