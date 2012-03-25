@@ -16,7 +16,7 @@ Abstract the details of accessing utfgrid and image data from the sqlite datasto
 ```python
 tileset = MbtileSet(mbtiles=mbtiles)
 zoom, col, row = 6, 9, 40
-tile = self.tileset.get_tile(zoom, col, row)
+tile = tileset.get_tile(zoom, col, row)
 binary_png = tile.get_png()
 text_json = tile.get_json()
 ```
@@ -47,6 +47,7 @@ ls /tmp/output/6/9/40.*
 This is nothing more than an experiment at this point. I would, however, like to:
 
 * Make error handling more robust
+* Config file for the server (port, list of mbtiles to serve)
 * Handle jpg (coding was stupidly implemented assuming png)
 * Test cases, docs
 * setup.py file, cheesehop it, etc.
