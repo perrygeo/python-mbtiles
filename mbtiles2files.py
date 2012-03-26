@@ -8,6 +8,8 @@ if __name__ == '__main__':
             dest='file', type='string')
     parser.add_option('-o', '--output', help='Output directory', action='store', 
             dest='output', type='string')
+    parser.add_option('-i', '--invert', help='Invert Y axis (True = Top Y origin ala google and bing)', action='store_true', 
+            dest='invert', default=False)
     (opts, args) = parser.parse_args()
 
     if not opts.file:
@@ -15,5 +17,9 @@ if __name__ == '__main__':
     if not opts.output:
         parser.error("Please specify and output directory")
 
-    tileset = MbtileSet( mbtiles=opts.file, outdir=opts.output)
+    origin = "bottom"
+    if opts.invert:
+        origin = "top"
+
+    tileset = MbtileSet(mbtiles=opts.file, outdir=opts.output, origin=origin)
     tileset.write_all()

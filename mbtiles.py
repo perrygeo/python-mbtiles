@@ -7,9 +7,13 @@ import os
 
 class MbtileSet:
 
-    def __init__(self, mbtiles, outdir=None):
+    def __init__(self, mbtiles, outdir=None, origin="bottom"):
         self.conn = sqlite3.connect(mbtiles)
         self.outdir = outdir
+        self.origin = origin
+        if self.origin not in ['bottom','top']:
+            raise Exception("origin must be either `bottom` or `top`")
+
 
     def write_all(self):
         if not self.outdir:
@@ -17,21 +21,37 @@ class MbtileSet:
         cur = self.conn.cursor()
         for row in cur.execute('select zoom_level, tile_column, tile_row from map'):
             z, x, y = row[:3]
-            tile = Mbtile(z, x, y, self.conn)
+            tile = Mbtile(z, x, y, self.conn, self.origin)
             tile.write_png(self.outdir)
             tile.write_json(self.outdir)
 
     def get_tile(self, z, x, y):
-        return Mbtile(z, x, y, self.conn)
+        return Mbtile(z, x, y, self.conn, self.origin)
 
 
 class Mbtile:
 
-    def __init__(self, z, x, y, conn):
+    def __init__(self, z, x, y, conn, origin):
         self.zoom = z
         self.col = x
         self.row = y
         self.conn = conn
+        self.origin = origin
+
+    @property
+    def output_row(self):
+        '''
+        self.row will ALWAYS refer to the bottom-origin tile scheme since MBTiles uses it internally
+        self.output_row CAN be set to top-origin scheme (like Google Maps etc.) my passing origin="bottom"
+
+        code must account for this but making the front-facing Y coordinate use the self.output_row property
+        '''
+        y = self.row
+        if self.origin == 'top':
+            # invert y axis to top origin
+            ymax = 1 << self.zoom;
+            y = ymax - self.row - 1;
+        return y
 
     def get_png(self):
         c = self.conn.cursor()
@@ -80,7 +100,7 @@ class Mbtile:
         return json.dumps(tgd)
 
     def write_png(self, outdir):
-        z, x, y = [str(i) for i in [self.zoom, self.col, self.row]] 
+        z, x, y = [str(i) for i in [self.zoom, self.col, self.output_row]] 
         pngdir = os.path.join(outdir, z, x) 
         try:
             os.makedirs(pngdir)
@@ -91,7 +111,7 @@ class Mbtile:
         fh.close()
 
     def write_json(self, outdir):
-        z, x, y = [str(i) for i in [self.zoom, self.col, self.row]] 
+        z, x, y = [str(i) for i in [self.zoom, self.col, self.output_row]] 
         jsondir = os.path.join(outdir, z, x) 
         try:
             os.makedirs(jsondir)

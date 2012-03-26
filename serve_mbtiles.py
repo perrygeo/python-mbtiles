@@ -21,7 +21,18 @@ class MbtilesHandler(tornado.web.RequestHandler):
         self.tileset = MbtileSet(mbtiles=mbtiles)
 
     def get(self, z, x, y):
-        tile = self.tileset.get_tile(z, x, y)
+        origin = self.get_arguments('origin')
+        try:
+            origin = origin[0]
+        except IndexError:
+            origin = 'bottom' 
+
+        if origin == 'top':
+            # invert y axis to top origin
+            ymax = 1 << int(z);
+            y = ymax - int(y) - 1;
+
+        tile = self.tileset.get_tile(z, x, y) 
         if self.ext == 'png':
             self.set_header('Content-Type', 'image/png')
             self.write(tile.get_png())
@@ -44,7 +55,7 @@ if __name__ == "__main__":
 
     thisdir = os.path.abspath(os.path.dirname(__file__))
     tilesets = [
-        ('test', os.path.join(thisdir, 'data', 'road-trip-wilderness.mbtiles'), ['png','json']),
+        ('test', os.path.join(thisdir, 'data', 'road-trip-wilderness.mbtiles'), ['png','json'],),
     ]
 
     for t in tilesets:
