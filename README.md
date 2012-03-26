@@ -14,7 +14,7 @@ Some python tools for working with [mbtiles](http://mapbox.com/mbtiles-spec/):
 Abstract the details of accessing utfgrid and image data from the sqlite datastore. See `mbtiles.py`
 
 ```python
-tileset = MbtileSet(mbtiles=mbtiles)
+tileset = MbtileSet(mbtiles='./data/road-trip-wilderness.mbtiles')
 zoom, col, row = 6, 9, 40
 tile = tileset.get_tile(zoom, col, row)
 binary_png = tile.get_png()
@@ -37,7 +37,7 @@ wget http://localhost:8988/test/6/9/40.json?callback=test
 A script to convert mbtiles files into png/json files on the filesystem. This eliminates the single-file advantages of mbtiles but gains portability in that tiles can be served statically without a web server in front of it. See `mbtiles2files.py`.
 
 ```bash
-python mbtiles2files.py -f data/road-trip-wilderness -o /tmp/output
+python mbtiles2files.py -f data/road-trip-wilderness.mbtiles -o /tmp/output
 ls /tmp/output/6/9/40.*
 ```
 ### Example
