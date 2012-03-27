@@ -37,7 +37,7 @@ python serve_mbtiles.py # runs on 8988
 wget http://localhost:8988/test/6/9/40.png
 wget http://localhost:8988/test/6/9/40.json
 wget http://localhost:8988/test/6/9/40.json?callback=test
-wget http://localhost:8988/test/6/9/40.json?origin=top # invert y-axis for top-origin tile scheme like Google, etc.
+wget http://localhost:8988/test/6/9/23.json?origin=top # invert y-axis for top-origin tile scheme like Google, etc.
 ```
 
 #### Covert mbtiles to png/json files
@@ -45,8 +45,13 @@ wget http://localhost:8988/test/6/9/40.json?origin=top # invert y-axis for top-o
 A script to convert mbtiles files into png/json files on the filesystem. This eliminates the single-file advantages of mbtiles but gains portability in that tiles can be served statically without a web server in front of it. See `mbtiles2files.py`.
 
 ```bash
+# Bottom-origin tiles (TMS)
 python mbtiles2files.py -f data/road-trip-wilderness.mbtiles -o /tmp/output
 ls /tmp/output/6/9/40.*
+
+# Invert to top-origin tiles (Google, OSM, etc.)
+python mbtiles2files.py -f data/road-trip-wilderness.mbtiles -o /tmp/output --invert
+ls /tmp/output/6/9/23.*
 ```
 ### Example
 
