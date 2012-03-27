@@ -7,6 +7,13 @@ Some python tools for working with [mbtiles](http://mapbox.com/mbtiles-spec/):
 >of thousands, hundreds of thousands, or even millions of standard map tile 
 >images in a single file.
 
+### Similar projects
+
+This is nothing more than an experiment at this point. For more full-featured libraries, you may also want to check out
+
+* [mbutil](https://github.com/mapbox/mbutil)
+* [landex](https://github.com/makinacorpus/landez)
+
 ### Project Goals
 
 #### Python classes
@@ -30,6 +37,7 @@ python serve_mbtiles.py # runs on 8988
 wget http://localhost:8988/test/6/9/40.png
 wget http://localhost:8988/test/6/9/40.json
 wget http://localhost:8988/test/6/9/40.json?callback=test
+wget http://localhost:8988/test/6/9/40.json?origin=top # invert y-axis for top-origin tile scheme like Google, etc.
 ```
 
 #### Covert mbtiles to png/json files
@@ -44,7 +52,6 @@ ls /tmp/output/6/9/40.*
 
 
 ### Roadmap
-This is nothing more than an experiment at this point. I would, however, like to:
 
 * Make error handling more robust
 * Config file for the server (port, list of mbtiles to serve)
