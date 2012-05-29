@@ -12,7 +12,7 @@ Some python tools for working with [mbtiles](http://mapbox.com/mbtiles-spec/):
 This is nothing more than an experiment at this point. For more full-featured libraries, you may also want to check out
 
 * [mbutil](https://github.com/mapbox/mbutil)
-* [landex](https://github.com/makinacorpus/landez)
+* [landez](https://github.com/makinacorpus/landez)
 
 ### Project Goals
 
