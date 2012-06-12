@@ -3,6 +3,7 @@ import sys
 import zlib
 import json
 import os
+import shutil
 
 
 class MbtileSet:
@@ -37,6 +38,7 @@ class Mbtile:
         self.row = y
         self.conn = conn
         self.origin = origin
+        self.blank_png_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'blank.png')
 
     @property
     def output_row(self):
@@ -104,11 +106,16 @@ class Mbtile:
         pngdir = os.path.join(outdir, z, x) 
         try:
             os.makedirs(pngdir)
-        except OSError:
+        except OSError as e:
             pass
-        fh = open(os.path.join(pngdir, y + ".png"), 'wb')
-        fh.write(self.get_png())
-        fh.close()
+        png = self.get_png()
+        path = os.path.join(pngdir, y + ".png")
+        if png:
+            fh = open(path, 'wb')
+            fh.write(png)
+            fh.close()
+        else:
+            shutil.copyfile(self.blank_png_path, path)
 
     def write_json(self, outdir):
         z, x, y = [str(i) for i in [self.zoom, self.col, self.output_row]] 
