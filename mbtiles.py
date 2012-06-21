@@ -124,6 +124,9 @@ class Mbtile:
             os.makedirs(jsondir)
         except OSError:
             pass
-        fh = open(os.path.join(jsondir, y + ".json"), 'w')
-        fh.write(self.get_json())
-        fh.close()
+        path = os.path.join(jsondir, y + ".json")
+        json = self.get_json()
+        if json:
+            fh = open(path , 'w')
+            fh.write(self.get_json())
+            fh.close()
